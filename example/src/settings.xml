@@ -1,0 +1,8 @@
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema id="{schemaName}" path="{schemaPath}">
+    <key name="initialized" type="b">
+      <default>true</default>
+      <summary>The extension has initialized.</summary>
+    </key>
+  </schema>
+</schemalist>

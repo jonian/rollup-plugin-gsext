@@ -1,0 +1,10 @@
+{
+  "shell-version": ["42"],
+  "uuid": "rollup-extension@hardpixel.eu",
+  "url": "https://github.com/hardpixel/rollup-extension",
+  "settings-schema": "org.gnome.shell.extensions.rollup-extension",
+  "gettext-domain": "rollup-extension",
+  "version": 1,
+  "name": "Rollup Extension",
+  "description": "GNOME Shell extension built with Rollup."
+}
