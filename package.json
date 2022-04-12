@@ -1,0 +1,38 @@
+{
+  "name": "rollup-plugin-gsext",
+  "version": "0.1.0",
+  "description": "Rollup plugin for GNOME shell extension development",
+  "repository": "https://github.com/hardpixel/rollup-plugin-gsext",
+  "author": "Jonian Guveli",
+  "license": "MIT",
+  "private": false,
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/es/index.js",
+  "type": "commonjs",
+  "exports": {
+    "require": "./dist/cjs/index.js",
+    "import": "./dist/es/index.js"
+  },
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "rollup",
+    "plugin",
+    "gnome-shell",
+    "extension",
+    "npm",
+    "modules"
+  ],
+  "peerDependencies": {
+    "rollup": "^2.42.0"
+  },
+  "devDependencies": {
+    "rollup": "^2.70.1"
+  }
+}
