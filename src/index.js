@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 import chp from 'child_process'
 
 const resolveImport = source =>
@@ -7,6 +6,9 @@ const resolveImport = source =>
 
 const replaceImports = code =>
   code.replace(/import (.*) from '(imports\..*)';/g, 'const $1 = $2;')
+
+const stripUnusedImports = code =>
+  code.replace(/import '(.*)';\n?/g, '')
 
 const stripExports = code =>
   code.replace(/\n?export .*;/, '')
@@ -143,6 +145,7 @@ export default function plugin(config = {}) {
       }
 
       code = replaceImports(code)
+      code = stripUnusedImports(code)
       code = stripExports(code)
 
       code = code.replace(/const (.*) = imports\.me;/, `const $1 = Me;`)
