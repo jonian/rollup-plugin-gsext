@@ -25,6 +25,7 @@ const toName = string =>
 export default function plugin(config = {}) {
   let pkgData  = JSON.parse(fs.readFileSync('package.json'))
   let metaPath = 'src/metadata.json'
+  let modules  = []
 
   const slug = toSlug(pkgData.name)
   const name = toName(pkgData.name)
@@ -53,19 +54,27 @@ export default function plugin(config = {}) {
     fileName
   })
 
+  const hasModule = source =>
+    modules.some(module => module.match(source.replace('#me', '')))
+
   mergeMeta(pkgData.extension)
   mergeMeta(config.metadata)
 
   return {
     name: 'gnome-shell-extension',
     options(options) {
-      if (typeof options.input == 'string' && options.input.match('metadata.json')) {
-        metaPath = options.input
-        mergeMeta(JSON.parse(fs.readFileSync(metaPath)))
+      modules = [].concat(options.input)
 
-        return { ...options, input: null }
-      }
-      return options
+      modules.forEach((file, index) => {
+        if (file.match('metadata.json')) {
+          metaPath = file
+          mergeMeta(JSON.parse(fs.readFileSync(file)))
+
+          modules.splice(index, 1)
+        }
+      })
+
+      return { ...options, input: modules }
     },
     buildStart() {
       const entry = fileChunk('extension.js')
@@ -115,14 +124,29 @@ export default function plugin(config = {}) {
       }
     },
     resolveId(source, importer, options) {
+      if (source.startsWith('#me/') && !hasModule(source)) {
+        const updatedId = source.replace('#me/', './')
+        return this.resolve(updatedId, importer, { skipSelf: true, ...options })
+      }
+
       if (source.startsWith('#')) {
         return { id: resolveImport(source), external: true }
       }
+
       return null
     },
     renderChunk(code, chunk, rollupOptions) {
+      code = code.replace(/import Me from 'imports\.me';\n?/, '')
+
+      if (code.match(/from 'imports\.me\.(.*)'/)) {
+        code = `const Me = imports.misc.extensionUtils.getCurrentExtension();\n\n${code}`
+      }
+
       code = replaceImports(code)
       code = stripExports(code)
+
+      code = code.replace(/const (.*) = imports\.me;/, `const $1 = Me;`)
+      code = code.replace(/const (.*) = imports\.me\.(.*);/, 'const $1 = Me.imports.$2;')
 
       return { code, map: null }
     }
