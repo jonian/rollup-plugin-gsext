@@ -1,11 +1,16 @@
 import { main as Main } from '#ui'
 
+import { moduleFunction } from '#me/module'
+import { inlineFunction } from '#me/inline'
+
 class RollupExtension {
   enable() {
+    this.type = moduleFunction()
     Main.panel.hide()
   }
 
   disable() {
+    this.type = inlineFunction()
     Main.panel.show()
   }
 }
