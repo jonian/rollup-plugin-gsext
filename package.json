@@ -2,7 +2,7 @@
   "name": "rollup-plugin-gsext",
   "version": "0.1.0",
   "description": "Rollup plugin for GNOME shell extension development",
-  "repository": "https://github.com/hardpixel/rollup-plugin-gsext",
+  "repository": "https://github.com/jonian/rollup-plugin-gsext",
   "author": "Jonian Guveli",
   "license": "MIT",
   "private": false,
