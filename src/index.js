@@ -122,7 +122,11 @@ export default function plugin(config = {}) {
     },
     writeBundle({ dir }) {
       if (dir && fs.existsSync(dir)) {
-        chp.exec('glib-compile-schemas schemas', { cwd: dir })
+        chp.exec('glib-compile-schemas schemas', { cwd: dir }, (error, stdout, stderr) => {
+          if (error || stderr) {
+            console.error(error || stderr)
+          }
+        })
       }
     },
     resolveId(source, importer, options) {
