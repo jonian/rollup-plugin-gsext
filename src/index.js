@@ -96,7 +96,7 @@ export default function plugin(config = {}) {
 
       if (fs.existsSync(schema)) {
         const name = metaData['settings-schema']
-        const path = name.replace(/\./g, '/')
+        const path = `/${name}/`.replace(/\./g, '/').replace(/\/{2,}/g, '/')
 
         const data = fs.readFileSync(schema, { encoding:'utf8' })
           .replace(/{schemaName}/g, name)
