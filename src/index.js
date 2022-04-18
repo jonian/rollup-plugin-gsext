@@ -142,11 +142,11 @@ export default function plugin(config = {}) {
       return null
     },
     renderChunk(code, chunk, rollupOptions) {
-      code = code.replace(/import Me from 'imports\.me';\n?/, '')
-
-      if (code.match(/from 'imports\.me\.(.*)'/)) {
+      if (code.match(/from 'imports\.me'/) || code.match(/from 'imports\.me\.(.*)'/)) {
         code = `const Me = imports.misc.extensionUtils.getCurrentExtension();\n\n${code}`
       }
+
+      code = code.replace(/import Me from 'imports\.me';\n?/, '')
 
       code = replaceImports(code)
       code = stripUnusedImports(code)
