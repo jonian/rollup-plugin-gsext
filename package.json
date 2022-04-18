@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-gsext",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Rollup plugin for GNOME shell extension development",
   "repository": "https://github.com/jonian/rollup-plugin-gsext",
   "author": "Jonian Guveli",
