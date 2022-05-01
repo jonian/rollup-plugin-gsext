@@ -156,6 +156,11 @@ export default function plugin(config = {}) {
       code = code.replace(/const (.*), ({.*}) = Me;/, 'const $1 = Me;\nconst $2 = Me;')
       code = code.replace(/const Me = Me;\n?/, '')
 
+      chunk.exports.forEach(item => {
+        const regex = new RegExp(`\\b(let|const) (${item})\\b`)
+        code = code.replace(regex, 'var $2')
+      })
+
       return { code, map: null }
     }
   }
