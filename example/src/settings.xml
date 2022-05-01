@@ -1,8 +1,18 @@
-<schemalist gettext-domain="gnome-shell-extensions">
-  <schema id="{schemaName}" path="{schemaPath}">
+<schemalist>
+  <enum id="mode">
+    <value value="0" nick="strict" />
+    <value value="1" nick="custom" />
+  </enum>
+
+  <schema>
     <key name="initialized" type="b">
       <default>true</default>
       <summary>The extension has initialized.</summary>
+    </key>
+
+    <key name="mode" enum="mode">
+      <default>"strict"</default>
+      <summary>The extension mode.</summary>
     </key>
   </schema>
 </schemalist>
