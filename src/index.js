@@ -142,18 +142,19 @@ export default function plugin(config = {}) {
       return null
     },
     renderChunk(code, chunk, rollupOptions) {
-      if (code.match(/from 'imports\.me'/) || code.match(/from 'imports\.me\.(.*)'/)) {
+      if (chunk.imports.some(item => item.startsWith('imports.me'))) {
+        code = code.replace(/import Me from 'imports\.me';\n?/, '')
         code = `const Me = imports.misc.extensionUtils.getCurrentExtension();\n\n${code}`
       }
-
-      code = code.replace(/import Me from 'imports\.me';\n?/, '')
 
       code = replaceImports(code)
       code = stripUnusedImports(code)
       code = stripExports(code)
 
-      code = code.replace(/const (.*) = imports\.me;/, `const $1 = Me;`)
+      code = code.replace(/const (.*) = imports\.me;/, 'const $1 = Me;')
       code = code.replace(/const (.*) = imports\.me\.(.*);/, 'const $1 = Me.imports.$2;')
+      code = code.replace(/const (.*), ({.*}) = Me;/, 'const $1 = Me;\nconst $2 = Me;')
+      code = code.replace(/const Me = Me;\n?/, '')
 
       return { code, map: null }
     }
