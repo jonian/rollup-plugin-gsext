@@ -1,4 +1,4 @@
-import extension from 'rollup-plugin-gsext'
+import extension from '../src/index.js'
 
 export default {
   input: ['src/metadata.json', 'src/module.js'],

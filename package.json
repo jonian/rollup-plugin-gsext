@@ -14,7 +14,8 @@
     "import": "./dist/es/index.js"
   },
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "build:example": "cd example && rollup -c"
   },
   "files": [
     "dist",
