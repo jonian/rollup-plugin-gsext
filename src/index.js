@@ -1,5 +1,6 @@
 import fs from 'fs'
 import chp from 'child_process'
+import xml from 'xml-js'
 
 const resolveImport = source =>
   source.replace('#', 'imports.').replace(/\//g, '.')
@@ -98,14 +99,16 @@ export default function plugin(config = {}) {
         const name = metaData['settings-schema']
         const path = `/${name}/`.replace(/\./g, '/').replace(/\/{2,}/g, '/')
 
-        const data = fs.readFileSync(schema, { encoding:'utf8' })
+        const text = fs.readFileSync(schema, { encoding:'utf8' })
           .replace(/{schemaName}/g, name)
           .replace(/{schemaPath}/g, path)
+
+        const data = xml.xml2js(text)
 
         this.emitFile({
           type: 'asset',
           fileName: `schemas/${name}.gschema.xml`,
-          source: data
+          source: xml.js2xml(data, { spaces: 2 })
         })
       }
 

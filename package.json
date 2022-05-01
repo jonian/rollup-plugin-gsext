@@ -35,5 +35,8 @@
   },
   "devDependencies": {
     "rollup": "^2.70.1"
+  },
+  "dependencies": {
+    "xml-js": "^1.6.11"
   }
 }
