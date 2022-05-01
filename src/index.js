@@ -105,6 +105,45 @@ export default function plugin(config = {}) {
 
         const data = xml.xml2js(text)
 
+        const walk = (tree, callback) => tree.elements.forEach(item => {
+          callback(item)
+          item.elements && walk(item, callback)
+        })
+
+        walk(data, item => {
+          const node = item.name
+          const attr = item.attributes || {}
+
+          const hasAttr = key =>
+            attr[key] != null && attr[key] != ''
+
+          const isPrefixed = key =>
+            hasAttr(key) ? attr[key].startsWith(name) : true
+
+          const mergeAttrs = attrs =>
+            item.attributes = { ...item.attributes, ...attrs }
+
+          if (node == 'schemalist' && !hasAttr('gettext-domain')) {
+            mergeAttrs({ 'gettext-domain': 'gnome-shell-extensions' })
+          }
+
+          if (node == 'schema' && !hasAttr('id')) {
+            mergeAttrs({ id: name })
+          }
+
+          if (node == 'schema' && !hasAttr('path')) {
+            mergeAttrs({ path: path })
+          }
+
+          if (node == 'enum' && !isPrefixed('id')) {
+            mergeAttrs({ id: `${name}.${attr.id}` })
+          }
+
+          if (node == 'key' && !isPrefixed('enum')) {
+            mergeAttrs({ enum: `${name}.${attr.enum}` })
+          }
+        })
+
         this.emitFile({
           type: 'asset',
           fileName: `schemas/${name}.gschema.xml`,
